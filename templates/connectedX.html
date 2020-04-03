@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ConnectedX</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style>
+    table {
+    	font-family: arial, sans-serif;
+    	border-collapse: collapse;
+    	margin: 2% auto;
+    }
+
+    td {
+    	border: 1px solid #dddddd;
+    	text-align: center;
+        font-size: 15px;
+    	padding: 0px;
+    	height: 30px;
+    	width: 30px;
+    }
+
+    td img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        height: 20px;
+        width: 20px;
+    }
+
+    .x-node{
+        animation-name: xNodeAnimation;
+        animation-duration: 0.2s;
+        animation-timing-function: ease-out;
+        animation-delay: 0;
+        animation-direction: alternate;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        animation-play-state: running;
+    }
+
+    .x-node-visited {
+        animation-name: visitedObjectAnimation;
+        animation-duration: 0.2s;
+        animation-timing-function: ease-out;
+        animation-delay: 0;
+        animation-direction: alternate;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        animation-play-state: running;
+    }
+
+    .x-node-scanning {
+        border: 1px solid coral;
+        border-collapse: separate;
+        border-spacing: 0px;
+    }
+
+    @keyframes xNodeAnimation {
+        0% {
+            transform: scale(.3);
+        }
+
+        50% {
+            transform: scale(1.2);
+        }
+
+        100% {
+            transform: scale(1.0);
+        }
+    }
+
+    @keyframes visitedStartNodePurpleAnimation {
+        0% {
+            transform: scale(.3);
+            background-color: rgba(41, 4, 24, 0.75);
+            border-radius: 100%;
+        }
+
+        50% {
+            background-color: rgba(97, 0, 20, 0.75);
+        }
+
+        75% {
+            transform: scale(1.2);
+            background-color: rgba(216, 5, 141, 0.75)
+        }
+
+        100% {
+            transform: scale(1.0);
+            background-color: rgba(178, 67, 255, 0.75);
+        }
+    }
+
+    @keyframes visitedStartNodeBlueAnimation {
+        0% {
+            transform: scale(.3);
+            background-color: rgba(0, 0, 66, 0.75);
+            border-radius: 100%;
+        }
+
+        50% {
+            background-color: rgba(17, 104, 217, 0.75);
+        }
+
+        75% {
+            transform: scale(1.2);
+            background-color: rgba(0, 217, 159, 0.75);
+        }
+
+        100% {
+            transform: scale(1.0);
+            background-color: rgba(0, 190, 218, 0.75);
+        }
+    }
+
+    @keyframes visitedAnimation {
+        0% {
+            transform: scale(.3);
+            background-color: rgba(0, 0, 66, 0.75);
+            border-radius: 100%;
+        }
+
+        50% {
+            background-color: rgba(17, 104, 217, 0.75);
+        }
+
+        75% {
+            transform: scale(1.2);
+            background-color: rgba(0, 217, 159, 0.75)
+        }
+
+        100% {
+            transform: scale(1.0);
+            background-color: rgba(0, 190, 218, 0.75);
+        }
+    }
+
+    @keyframes wallAnimation {
+        0% {
+            transform: scale(.3);
+            background-color: rgb(12, 53, 71);
+        }
+
+        50% {
+            transform: scale(1.2);
+            background-color: rgb(12, 53, 71);
+        }
+
+        100% {
+            transform: scale(1.0);
+            background-color: rgb(12, 53, 71);
+        }
+    }
+
+    @keyframes visitedObjectAnimation {
+        0% {
+            transform: scale(.3);
+            /*background-color: rgba(41, 4, 24, 0.75);*/
+            border-radius: 100%;
+        }
+
+        50% {
+            /*background-color: rgba(97, 0, 20, 0.75);*/
+        }
+
+        75% {
+            transform: scale(1.2);
+            /*background-color: rgba(216, 5, 141, 0.75)*/
+        }
+
+        100% {
+            transform: scale(1.0);
+            /*background-color: rgba(178, 67, 255, 0.75);*/
+        }
+    }
+
+    body {
+/*        margin: 2%;
+*/        height: 100%;
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+         -khtml-user-select: none; /* Konqueror HTML */
+           -moz-user-select: none; /* Old versions of Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+                user-select: none; /* Non-prefixed version, currently
+                                      supported by Chrome, Opera and Firefox */
+    }
+
+    .PositionBlock {
+        height: 50px; width: 20%; 
+        color: black; 
+        display: inline-block; 
+        text-align: center;
+        font-size: 30px;
+        line-height: 60px; 
+        margin: auto;
+    }
+
+    .Position {
+        margin-left: 30%;
+    }
+
+</style>
+</head>
+<body draggable="false" onload="draw()">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <ul class="navbar-nav">
+            <li style="margin: auto" class="nav-item active">
+                <a class="nav-link" href="#">Covid-19</a>
+            </li>
+            <li style="margin: auto" class="nav-item">
+                <div style="margin: auto" class="form-group col-md-1">
+                    <button id = "NoSocialDistance" class="btn btn-primary" onclick="randomize()" >No Social Distance</button>
+                </div>
+            </li>
+            <li style="margin: auto" class="nav-item">
+                <div style="margin: auto" class="form-group col-md-1">
+                    <button id = "SocialDistance" class="btn btn-primary">Social Distance</button>
+                </div>
+            </li>
+            <li style="margin: auto" class="nav-item">
+                <div style="margin: auto" class="form-group col-md-1">
+                    <button id = "Spread" class="btn btn-danger" onclick="findXConnected()" >Spread</button>
+                </div>
+            </li>
+            <li style="margin: auto" class="nav-item">
+                <div style="margin: auto" class="form-group col-md-1">
+                    <button id = "Clear" class="btn btn-primary" onclick="toggleAbort()">Clear</button>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+   <div>
+        <div id="PositionSection" class="Position">
+        </div>
+
+	<div>
+		<table id="board" draggable="false"></table>
+	</div>
+</body>
+<script type="text/javascript">
+
+    var abort = false
+    var done = false
+
+    var gridObject = {
+        gridRow: 22,
+        gridCol: 40,
+        inputString: "",
+        xNodes: [],
+        xCovid: [],
+        xVisited: [],
+        xPath: [],
+    };
+
+    var spreading = {
+        xNodes: [],
+        xCovid: [],
+        xVisited: [],
+        xPath: []
+    }
+
+    async function randomize () {
+
+        clearGrid()
+
+        const response = await fetch('http://127.0.0.1:5000/randomizeNoSocialDistance', {
+            method: 'GET',
+        });
+
+        const randomizeResult = await response.json(); //extract JSON from the http response
+
+        // re-init gridObject
+        gridObject.xCovid = randomizeResult.covid
+        gridObject.inputString = convertInputStringToGrid(randomizeResult.inputString)
+
+        draw();
+    }
+
+    function displayPosition() {
+        let positionSection = document.getElementById("PositionSection");
+        positionSection.innerHTML = "";
+
+        var healthyPeople = gridObject.xNodes.length - gridObject.xPath.length
+
+        let positionHTML=
+        `
+            <div style="color: red" class="PositionBlock">
+                ${gridObject.xCovid.length}    🦠
+            </div>
+
+            <div style="color: red" class="PositionBlock">
+                ${gridObject.xPath.length}     🤢
+            </div>
+            <div style="color: black" class="PositionBlock">
+                ${healthyPeople}    😷
+            </div>
+        `
+        positionSection.innerHTML = positionHTML;
+    }
+
+    async function findXConnected() {
+
+        convertGridToInputString();
+        gridObject.xPath =[]
+        gridObject.xVisited = []
+
+        const response = await fetch('http://127.0.0.1:5000/findConnectedX', {
+                                    method: 'POST',
+                                    body: JSON.stringify(gridObject),
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                });
+
+        const result = await response.json();
+
+        await displayAlgorithm(result)
+
+        addEventListeners();
+    }
+
+    function draw() {
+
+        let tableHTML = "";
+
+        for (let r = 0; r < gridObject.gridRow; r++) {
+            let currentArrayRow = [];
+            let currentHTMLRow = `<tr id="row ${r}">`;
+            for (let c = 0; c < gridObject.gridCol; c++) {
+
+                let newNodeId = `${c}-${r}`;
+
+                if (gridObject.xCovid.includes(newNodeId)) {
+                    currentHTMLRow += `<td style = "background-color: #171110" id="${newNodeId}">🦠</td>`;
+                }
+                
+                else if (gridObject.xNodes.includes(newNodeId)) {
+                    currentHTMLRow += `<td id="${newNodeId}">😷</td>`;
+                }
+                else {
+                    currentHTMLRow += `<td id="${newNodeId}"></td>`;
+                }
+            }
+            tableHTML += `${currentHTMLRow}</tr>`;
+        }
+        let board = document.getElementById("board");
+        board.innerHTML = tableHTML;
+        addEventListeners();
+        displayPosition();
+    }
+
+    function addEventListeners() {
+
+        // enabl button
+        console.log("addd")
+        document.getElementById("NoSocialDistance").disabled = false;
+        document.getElementById("SocialDistance").disabled = false;
+        document.getElementById("Spread").disabled = false;
+        document.getElementById("Clear").disabled = false;
+        
+        for (let r = 0; r < gridObject.gridRow; r++) {
+            for (let c = 0; c < gridObject.gridCol; c++) {
+                let currentId = `${c}-${r}`;
+                var dragging = false;
+                let currentElement = document.getElementById(currentId);
+                currentElement.onmousedown = (e) => {
+
+                    e.preventDefault();
+
+                    dragging = true;
+
+                    if (!gridObject.xNodes.includes(currentId) && !gridObject.xCovid.includes(currentId)) {
+                        
+                        currentElement.classList.add('x-node');
+                        currentElement.innerHTML='😷'
+
+                        gridObject.xNodes.push(currentId);
+                        displayPosition();
+                        
+                    } else if (gridObject.xNodes.includes(currentId)) {
+                        
+                        currentElement.classList.remove('x-node');
+                        currentElement.innerHTML=''
+
+                        gridObject.xNodes.splice(gridObject.xNodes.indexOf(currentId),1);
+                        displayPosition();
+                    }
+                }
+                currentElement.onmouseup = () => {
+                    dragging = false;
+                }
+                currentElement.onmouseenter = () => {
+                    if (dragging) {
+                        if (!gridObject.xNodes.includes(currentId) && !gridObject.xCovid.includes(currentId)) {
+
+                            currentElement.classList.add('x-node');
+                            currentElement.innerHTML='😷'
+
+                            gridObject.xNodes.push(currentId);
+                            displayPosition();
+                        } else if (gridObject.xNodes.includes(currentId)) {
+
+                            currentElement.classList.remove('x-node');
+                            currentElement.innerHTML=''
+
+                            gridObject.xNodes.splice(gridObject.xNodes.indexOf(currentId),1);
+                            displayPosition();
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    function clearGrid() {
+        gridObject.xNodes = [];
+        gridObject.xVisited = [];
+        gridObject.xPath = [];
+        gridObject.xCovid = [];
+        gridObject.inputString = [];
+
+        draw();
+        displayPosition();
+
+        abort = false
+    }
+
+    function convertGridToInputString() {
+
+        inputString = ""
+
+        for (let r = 0; r < gridObject.gridRow; r++) {
+            for (let c = 0; c < gridObject.gridCol; c++) {
+
+                let currentId = `${c}-${r}`;
+
+                inputString += gridObject.xNodes.includes(currentId) || gridObject.xCovid.includes(currentId) ? "1" : "0"
+
+            }
+        }
+
+        gridObject.inputString = inputString;
+
+        return inputString;
+    }
+
+    function convertInputStringToGrid(inputString) {
+
+        gridObject.xNodes = []
+        gridObject.xPath = []
+        gridObject.xVisited = []
+
+        for (var i = 0; i < inputString.length; i++) {
+            // check if == "1"
+            if (inputString[i] === "1") {
+                // convert to grid location
+                let localCol = i % gridObject.gridCol;
+                let localRow = Math.ceil((i - localCol)/gridObject.gridCol);
+                let localCell = `${localCol}-${localRow}`;
+
+                // if node is not a covid, do not add to xNodes
+                if (gridObject.xCovid.includes(localCell)) {
+                    continue;
+                }
+
+                gridObject.xNodes.push(localCell)
+                // console.log(i, localCell);
+            }
+        }
+        return inputString
+    }
+
+    async function displayAlgorithm(result) {
+
+        removeEventlistener();
+
+        if (done) {
+            draw();
+            gridObject.xVisited=[]
+            gridObject.xPath = []
+            done = false;
+            removeEventlistener();
+        }
+
+        for (var i = 0; i < result.length; i++) {
+            
+            if (abort) {
+                clearGrid();
+                abort = false
+                return;
+            }
+
+            if(result[i].path.length > 0) {
+                displayPath(result[i].path)
+            } else {
+                sleep(10);
+            }
+        }
+
+        console.log(result)
+
+        await isComplete(result)
+
+        done = true
+    }
+
+    async function isComplete(result) {
+
+        var toVisitNodes = - gridObject.xCovid.length;
+
+        for (var i = result.length - 1; i >= 0; i--) {
+            toVisitNodes += result[i].pathSize
+        }
+
+        while (true) {
+            if (gridObject.xVisited.length == toVisitNodes) {
+                break;
+            }
+            await sleep(1000)
+        }
+        return;
+    }
+
+    async function displayPath(path) {
+        for (var i = 0; i < path.length; i++) {
+
+            let currentId = `${path[i][1]}-${path[i][0]}`;
+
+            // if it is a covid node, do not add to xVisited
+            if(gridObject.xCovid.includes(currentId)) {
+                continue;
+            }
+            
+            let currentElement = document.getElementById(currentId);
+            gridObject.xPath.push(currentId);
+            gridObject.xVisited.push(currentId);
+
+            currentElement.classList.add('x-node-visited');
+            currentElement.innerHTML = '🤢'
+            await sleep(20);
+            displayPosition()
+        }
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function toggleAbort() {
+
+        // 
+        if (gridObject.xNodes.length > 0 && gridObject.xVisited.length > 0) {
+            abort = true;
+            clearGrid();
+        }
+        // chay het roi
+        else if (gridObject.xVisited.length == gridObject.gridRow * gridObject.gridCol) {
+            clearGrid();
+        } 
+        // dang chay giua chung
+        else if (gridObject.xVisited.length > 0) {
+            abort = true;
+        }
+        else if (gridObject.xNodes.length > 0) {
+            clearGrid();
+        }
+        
+        return;
+    }
+
+    function removeEventlistener() {
+
+        // disabled button
+        console.log("remove")
+        document.getElementById("NoSocialDistance").disabled = true;
+        document.getElementById("SocialDistance").disabled = true;
+        document.getElementById("Spread").disabled = true;
+        document.getElementById("Clear").disabled = true;
+
+        for (let r = 0; r < gridObject.gridRow; r++) {
+            for (let c = 0; c < gridObject.gridCol; c++) {
+                let currentId = `${c}-${r}`;
+                var dragging = false;
+                let currentElement = document.getElementById(currentId);
+                currentElement.onmousedown = (e) => {
+                }
+                currentElement.onmouseup = () => {
+                }
+                currentElement.onmouseenter = () => {
+                }
+            }
+        }
+    }
+
+</script>
+</html>
+
+
+
+
+
+
+

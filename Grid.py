@@ -1,9 +1,14 @@
+from random import randrange
+
+
 class Grid:
-    def __init__(self, row, col, inputString):
+    def __init__(self, row, col, inputString, covid):
         self.row = row
         self.col = col
         self.inputString = inputString
+        self.covid = covid
         self.grid = self.buildGrid(row, col, inputString)
+        self.traversePath = []
 
     @staticmethod
     def buildGrid(row, col, inputString):
@@ -13,26 +18,46 @@ class Grid:
 
         for i in range(row):
             for j in range(col):
-                grid[i][j] = cells[i * 4 + j]
+                grid[i][j] = cells[i * col + j]
 
         return grid
 
     @staticmethod
     def findMaxConnectedCell(grid):
+
         visitedNodes = []
         maxNodeList = []
-        for i in range(grid.row):
-            for j in range(grid.col):
 
-                if (i, j) in visitedNodes or grid.grid[i][j] == '0':
-                    continue
+        for node in grid.covid:
+            i = int(node.split("-")[1])
+            j = int(node.split("-")[0])
 
-                nodeList = []
+            if (i, j) in visitedNodes or grid.grid[i][j] == '0':
+                nodeVisit = dict({
+                    "node": (i, j),
+                    "path": [],
+                    "pathSize": 0,
+                })
+                grid.traversePath.append(nodeVisit)
+                continue
 
-                grid.DFS(grid, (i, j), visitedNodes, nodeList)
-                maxNodeList = maxNodeList if len(maxNodeList) > len(nodeList) else nodeList
+            nodeList = []
 
-        return [len(maxNodeList), maxNodeList]
+            grid.DFS(grid, (i, j), visitedNodes, nodeList)
+
+            if len(nodeList) > len(maxNodeList):
+                maxNodeList = nodeList
+
+            # added to traverse path
+            nodeVisit = dict({
+                "node": (i, j),
+                "path": nodeList,
+                "pathSize": len(nodeList),
+            })
+            grid.traversePath.append(nodeVisit)
+
+        # return [len(maxNodeList), maxNodeList]
+        return grid
 
     @staticmethod
     def DFS(grid, currentNode, visitedNodes, nodeList):
@@ -77,17 +102,29 @@ class Grid:
 
 
 if __name__ == '__main__':
-    inputString = "1100011000101000"
-    row = 4
-    col = 4
+    pass
+    # inputString = "1100000000" \
+    #               "1111000000" \
+    #               "0110000000" \
+    #               "0100000000" \
+    #               "0000000000" \
+                  # "0000000000" \
+                  # "0000000000" \
+                  # "0000000000" \
+                  # "0000000000" \
+                  # "0000000000"
+    # row = 5
+    # col = 10
+    #
+    # # build grid
+    # grid = Grid(row, col, inputString)
+    #
+    # # print grid
+    # print(grid)
+    #
+    # # find connected cells
+    # result = Grid.findMaxConnectedCell(grid)
+    #
+    # print(result)
 
-    # build grid
-    grid = Grid(row, col, inputString)
-
-    # print grid
-    print(grid)
-
-    # find connected cells
-    result = Grid.findMaxConnectedCell(grid)
-
-    print(result)
+    # print(randrange(10))
