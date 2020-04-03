@@ -15,6 +15,12 @@ def connectedX():
     return render_template("connectedX.html",)
 
 
+@app.route("/dummy", methods=["GET"])
+def hello():
+
+    return render_template("hello.html",)
+
+
 @app.route("/randomizeNoSocialDistance", methods=["GET"])
 def randomizeNoSocialDistance():
 
