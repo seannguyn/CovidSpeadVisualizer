@@ -22,14 +22,6 @@
     	width: 30px;
     }
 
-    td img {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        height: 20px;
-        width: 20px;
-    }
-
     .x-node{
         animation-name: xNodeAnimation;
         animation-duration: 0.2s;
@@ -72,89 +64,6 @@
         }
     }
 
-    @keyframes visitedStartNodePurpleAnimation {
-        0% {
-            transform: scale(.3);
-            background-color: rgba(41, 4, 24, 0.75);
-            border-radius: 100%;
-        }
-
-        50% {
-            background-color: rgba(97, 0, 20, 0.75);
-        }
-
-        75% {
-            transform: scale(1.2);
-            background-color: rgba(216, 5, 141, 0.75)
-        }
-
-        100% {
-            transform: scale(1.0);
-            background-color: rgba(178, 67, 255, 0.75);
-        }
-    }
-
-    @keyframes visitedStartNodeBlueAnimation {
-        0% {
-            transform: scale(.3);
-            background-color: rgba(0, 0, 66, 0.75);
-            border-radius: 100%;
-        }
-
-        50% {
-            background-color: rgba(17, 104, 217, 0.75);
-        }
-
-        75% {
-            transform: scale(1.2);
-            background-color: rgba(0, 217, 159, 0.75);
-        }
-
-        100% {
-            transform: scale(1.0);
-            background-color: rgba(0, 190, 218, 0.75);
-        }
-    }
-
-    @keyframes visitedAnimation {
-        0% {
-            transform: scale(.3);
-            background-color: rgba(0, 0, 66, 0.75);
-            border-radius: 100%;
-        }
-
-        50% {
-            background-color: rgba(17, 104, 217, 0.75);
-        }
-
-        75% {
-            transform: scale(1.2);
-            background-color: rgba(0, 217, 159, 0.75)
-        }
-
-        100% {
-            transform: scale(1.0);
-            background-color: rgba(0, 190, 218, 0.75);
-        }
-    }
-
-    @keyframes wallAnimation {
-        0% {
-            transform: scale(.3);
-            background-color: rgb(12, 53, 71);
-        }
-
-        50% {
-            transform: scale(1.2);
-            background-color: rgb(12, 53, 71);
-        }
-
-        100% {
-            transform: scale(1.0);
-            background-color: rgb(12, 53, 71);
-        }
-    }
-
     @keyframes visitedObjectAnimation {
         0% {
             transform: scale(.3);
@@ -178,8 +87,7 @@
     }
 
     body {
-/*        margin: 2%;
-*/        height: 100%;
+        height: 100%;
         -webkit-touch-callout: none; /* iOS Safari */
         -webkit-user-select: none; /* Safari */
          -khtml-user-select: none; /* Konqueror HTML */
@@ -281,7 +189,7 @@
         draw();
     }
 
-    function displayPosition() {
+    function displayStats() {
         let positionSection = document.getElementById("PositionSection");
         positionSection.innerHTML = "";
 
@@ -336,7 +244,7 @@
                 let newNodeId = `${c}-${r}`;
 
                 if (gridObject.xCovid.includes(newNodeId)) {
-                    currentHTMLRow += `<td style = "background-color: #171110" id="${newNodeId}">🦠</td>`;
+                    currentHTMLRow += `<td style = "background-color: #E1D9D7; font-size: 20px" id="${newNodeId}">🦠</td>`;
                 }
                 
                 else if (gridObject.xNodes.includes(newNodeId)) {
@@ -351,13 +259,12 @@
         let board = document.getElementById("board");
         board.innerHTML = tableHTML;
         addEventListeners();
-        displayPosition();
+        displayStats();
     }
 
     function addEventListeners() {
 
         // enabl button
-        console.log("addd")
         document.getElementById("NoSocialDistance").disabled = false;
         document.getElementById("SocialDistance").disabled = false;
         document.getElementById("Spread").disabled = false;
@@ -380,7 +287,7 @@
                         currentElement.innerHTML='😷'
 
                         gridObject.xNodes.push(currentId);
-                        displayPosition();
+                        displayStats();
                         
                     } else if (gridObject.xNodes.includes(currentId)) {
                         
@@ -388,7 +295,7 @@
                         currentElement.innerHTML=''
 
                         gridObject.xNodes.splice(gridObject.xNodes.indexOf(currentId),1);
-                        displayPosition();
+                        displayStats();
                     }
                 }
                 currentElement.onmouseup = () => {
@@ -402,14 +309,14 @@
                             currentElement.innerHTML='😷'
 
                             gridObject.xNodes.push(currentId);
-                            displayPosition();
+                            displayStats();
                         } else if (gridObject.xNodes.includes(currentId)) {
 
                             currentElement.classList.remove('x-node');
                             currentElement.innerHTML=''
 
                             gridObject.xNodes.splice(gridObject.xNodes.indexOf(currentId),1);
-                            displayPosition();
+                            displayStats();
                         }
                     }
                 }
@@ -425,7 +332,7 @@
         gridObject.inputString = [];
 
         draw();
-        displayPosition();
+        displayStats();
 
         abort = false
     }
@@ -469,7 +376,6 @@
                 }
 
                 gridObject.xNodes.push(localCell)
-                // console.log(i, localCell);
             }
         }
         return inputString
@@ -501,8 +407,6 @@
                 sleep(10);
             }
         }
-
-        console.log(result)
 
         await isComplete(result)
 
@@ -542,8 +446,8 @@
 
             currentElement.classList.add('x-node-visited');
             currentElement.innerHTML = '🤢'
-            await sleep(20);
-            displayPosition()
+            await sleep(50);
+            displayStats()
         }
     }
 
@@ -576,7 +480,6 @@
     function removeEventlistener() {
 
         // disabled button
-        console.log("remove")
         document.getElementById("NoSocialDistance").disabled = true;
         document.getElementById("SocialDistance").disabled = true;
         document.getElementById("Spread").disabled = true;
@@ -587,12 +490,9 @@
                 let currentId = `${c}-${r}`;
                 var dragging = false;
                 let currentElement = document.getElementById(currentId);
-                currentElement.onmousedown = (e) => {
-                }
-                currentElement.onmouseup = () => {
-                }
-                currentElement.onmouseenter = () => {
-                }
+                currentElement.onmousedown = (e) => {}
+                currentElement.onmouseup = () => {}
+                currentElement.onmouseenter = () => {}
             }
         }
     }
