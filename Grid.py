@@ -1,5 +1,6 @@
 from random import randrange
-
+import random
+import math
 
 class Grid:
     def __init__(self, row, col, inputString, covid):
@@ -91,6 +92,82 @@ class Grid:
     def checkValidPosition(grid, currentNodePos):
         return True if (0 <= currentNodePos[0] < grid.row and 0 <= currentNodePos[1] < grid.col) else False
 
+    @staticmethod
+    def randomInputStringAndCovidNoSocialDistance():
+        strLen = 880
+        binaryStr = ""
+        ones = []
+        covidStr = ""
+
+        for i in range(strLen):
+            binaryNum = randrange(2)
+            binaryStr += str(binaryNum)
+            if binaryNum == 1:
+                ones.append(len(binaryStr)-1)
+
+        # random number of covid position
+        covidPosition = []
+        for i in range(2):
+            ranNum = ones[randrange(len(ones))]
+            covidPosition.append(ranNum)
+
+        # convert ones position into grid position
+        for i in covidPosition:
+            localCol = i % 40;
+            localRow = math.ceil((i - localCol) / 40)
+            localCell = str(localCol)+"-"+str(localRow)
+            covidStr += localCell+"_"
+
+        covidStr = covidStr[:-1]
+
+        return covidStr+"|"+binaryStr
+
+    @staticmethod
+    def randomInputStringAndCovidSocialDistance():
+        strLen = 880
+        col = 40
+        binaryStr = ""
+        ones = []
+        prohibittedCell = []
+        covidStr = ""
+
+        for i in range(strLen):
+            binaryNum = randrange(2)
+            if binaryNum == 1 and i not in prohibittedCell:
+
+                binaryStr += str(binaryNum)
+                ones.append(len(binaryStr) - 1)
+
+                # addProhibitedCell:
+                prohibittedCell.append(i + 1)
+                prohibittedCell.append(i + col + 1)
+                prohibittedCell.append(i + col)
+                prohibittedCell.append(i + col - 1)
+                prohibittedCell.append(i - 1)
+                prohibittedCell.append(i - col)
+                prohibittedCell.append(i - col - 1)
+                prohibittedCell.append(i - col + 1)
+            else:
+                binaryStr += str(0)
+
+        # random number of covid position
+        iter = 7 if len(ones) > 7 else len(ones)
+        covidPosition = []
+        for i in range(iter):
+            ranNum = ones[randrange(len(ones))]
+            covidPosition.append(ranNum)
+
+        # convert ones position into grid position
+        for i in covidPosition:
+            localCol = i % 40;
+            localRow = math.ceil((i - localCol) / 40)
+            localCell = str(localCol) + "-" + str(localRow)
+            covidStr += localCell + "_"
+
+        covidStr = covidStr[:-1]
+
+        return covidStr + "|" + binaryStr
+
     def __str__(self):
         gridString = ""
         for i in range(self.row):
@@ -102,6 +179,9 @@ class Grid:
 
 
 if __name__ == '__main__':
+    # string = Grid.randomInputStringAndCovidNoSocialDistance()
+    # string = Grid.randomInputStringAndCovidSocialDistance()
+    # print(string)
     pass
     # inputString = "1100000000" \
     #               "1111000000" \
@@ -128,3 +208,4 @@ if __name__ == '__main__':
     # print(result)
 
     # print(randrange(10))
+

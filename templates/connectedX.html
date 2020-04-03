@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ConnectedX</title>
+    <title>Covid-19 Spread</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/png" href="/static/images/covid.png">
 <style>
     table {
     	font-family: arial, sans-serif;
@@ -111,22 +112,75 @@
         margin-left: 30%;
     }
 
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 40%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .footer {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        color: black;
+        text-align: center;
+        margin-bottom: 10px
+    }
+
 </style>
 </head>
-<body draggable="false" onload="draw()">
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<body draggable="false" onload="initializingPage()">
+    <nav style="border-radius: 0px" class="navbar navbar-expand-sm bg-dark navbar-dark">
         <ul class="navbar-nav">
-            <li style="margin: auto" class="nav-item active">
-                <a class="nav-link" href="#">Covid-19</a>
+            <li style="margin: auto; font-size: 30px" class="nav-item active">
+                <a class="nav-link" href="#">Covid-19 🦠</a>
             </li>
             <li style="margin: auto" class="nav-item">
                 <div style="margin: auto" class="form-group col-md-1">
-                    <button id = "NoSocialDistance" class="btn btn-primary" onclick="randomize()" >No Social Distance</button>
+                    <button id = "NoSocialDistance" class="btn btn-primary" onclick="randomizeNoSocialDistance()" >No Social Distance</button>
                 </div>
             </li>
             <li style="margin: auto" class="nav-item">
                 <div style="margin: auto" class="form-group col-md-1">
-                    <button id = "SocialDistance" class="btn btn-primary">Social Distance</button>
+                    <button id = "SocialDistance" class="btn btn-primary" onclick="randomizeSocialDistance()">Social Distance</button>
+                </div>
+            </li>
+            <li style="margin: auto" class="nav-item">
+                <div style="margin: auto" class="form-group col-md-1">
+                    <button id = "InfectiousGuideButton" class="btn btn-secondary">Infectious Guide</button>
                 </div>
             </li>
             <li style="margin: auto" class="nav-item">
@@ -142,13 +196,52 @@
         </ul>
     </nav>
 
-   <div>
-        <div id="PositionSection" class="Position">
+    <!-- The Modal -->
+    <div id="myModalFail" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span id="spanFail" class="close">&times;</span>
+            <p id="warningSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 30px; white-space: pre; color: red"></p>
+            <img style="width: 65%; height:65%"src="/static/images/giphy.gif"/>
         </div>
+        </div>
+   <div>
+
+    <!-- The Modal -->
+    <div id="myModalSuccess" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span id="spanSuccess" class="close">&times;</span>
+            <p style="margin-bottom: 20px; margin-top: 20px; font-size: 30px">Be Smart. Be Social Distant</p>
+            <p id="successSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 30px; white-space: pre; color: red"></p>
+            <img style="width: 66.8%; height:60%" src="/static/images/tenor.gif"/>
+        </div>
+        </div>
+   <div>
+
+    <!-- The Modal -->
+    <div id="myModalInfectionGuide" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span id="spanGuide" class="close">&times;</span>
+            <p id="guideSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 30px; white-space: pre;">No Social Distance</p>
+            <img style="width: 100%; height:33%"src="/static/images/NSD.png"/>
+            <p id="guideSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 30px; white-space: pre;">Social Distance</p>
+            <img style="width: 100%; height:33%"src="/static/images/SD.png"/>
+        </div>
+        </div>
+   <div>
+
+    <div id="PositionSection" class="Position">
+    </div>
 
 	<div>
 		<table id="board" draggable="false"></table>
 	</div>
+
+    <div class="footer">
+        <a style="text-decoration : none; color : #000;" href="https://github.com/seannguyn">github.com/seannguyn</a>
+    </div>
 </body>
 <script type="text/javascript">
 
@@ -172,11 +265,61 @@
         xPath: []
     }
 
-    async function randomize () {
+    var myModalFail = document.getElementById("myModalFail");
+    var myModalSuccess = document.getElementById("myModalSuccess");
+    var spanSuccess = document.getElementById("spanSuccess");
+    var spanFail = document.getElementById("spanFail");
+    var rootURL = "http://127.0.0.1:5000"
+
+
+    // Get the modal
+    var myModalInfectionGuide = document.getElementById("myModalInfectionGuide");
+
+    // Get the button that opens the modal
+    var InfectiousGuideButton = document.getElementById("InfectiousGuideButton");
+
+    // Get the <span> element that closes the modal
+    var spanGuide = document.getElementById("spanGuide");
+
+    // When the user clicks on the button, open the modal
+    InfectiousGuideButton.onclick = function() {
+        myModalInfectionGuide.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    spanGuide.onclick = function() {
+        myModalInfectionGuide.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == myModalInfectionGuide) {
+            myModalInfectionGuide.style.display = "none";
+        }
+    }
+
+
+    spanSuccess.onclick = function() {
+      myModalSuccess.style.display = "none";
+    }
+    spanFail.onclick = function() {
+      myModalFail.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == myModalFail) {
+        myModalFail.style.display = "none";
+      }
+      else if (event.target == myModalSuccess) {
+        myModalSuccess.style.display = "none";
+      }
+    }
+
+    async function randomizeNoSocialDistance () {
 
         clearGrid()
 
-        const response = await fetch('http://127.0.0.1:5000/randomizeNoSocialDistance', {
+        const response = await fetch(rootURL+'/randomizeNoSocialDistance', {
             method: 'GET',
         });
 
@@ -187,6 +330,27 @@
         gridObject.inputString = convertInputStringToGrid(randomizeResult.inputString)
 
         draw();
+    }
+
+    async function randomizeSocialDistance () {
+
+        clearGrid()
+
+        const response = await fetch(rootURL+'/randomizeSocialDistance', {
+            method: 'GET',
+        });
+
+        const randomizeResult = await response.json(); //extract JSON from the http response
+
+        // re-init gridObject
+        gridObject.xCovid = randomizeResult.covid
+        gridObject.inputString = convertInputStringToGrid(randomizeResult.inputString)
+
+        draw();
+    }
+
+    async function initializingPage() {
+        randomizeNoSocialDistance();
     }
 
     function displayStats() {
@@ -217,7 +381,7 @@
         gridObject.xPath =[]
         gridObject.xVisited = []
 
-        const response = await fetch('http://127.0.0.1:5000/findConnectedX', {
+        const response = await fetch(rootURL+'/findConnectedX', {
                                     method: 'POST',
                                     body: JSON.stringify(gridObject),
                                     headers: {
@@ -427,6 +591,18 @@
             }
             await sleep(1000)
         }
+        
+        if (gridObject.xVisited.length == 0) {
+            var displayText = document.getElementById("successSpan");
+            displayText.innerHTML = `${gridObject.xCovid.length}  🦠        ${gridObject.xPath.length}  🤢        <span style="color: black">${gridObject.xNodes.length - gridObject.xPath.length}  😷<span>`
+            myModalSuccess.style.display = "block";
+        }else {
+            var displayText = document.getElementById("warningSpan");
+            displayText.innerHTML = `${gridObject.xCovid.length}  🦠        ${gridObject.xPath.length}  🤢        <span style="color: black">${gridObject.xNodes.length - gridObject.xPath.length}  😷<span>`
+            myModalFail.style.display = "block";
+        }
+        
+
         return;
     }
 
@@ -446,7 +622,7 @@
 
             currentElement.classList.add('x-node-visited');
             currentElement.innerHTML = '🤢'
-            await sleep(50);
+            await sleep(40);
             displayStats()
         }
     }
