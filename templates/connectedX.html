@@ -188,7 +188,12 @@
             </li>
             <li style="margin: auto" class="nav-item">
                 <div style="margin: auto" class="form-group col-md-1">
-                    <button id = "Spread" class="btn btn-danger" onclick="findXConnected()" >Spread</button>
+                    <button id = "SpreadDFS" class="btn btn-danger" onclick="findXConnected()" >Depth First Spread</button>
+                </div>
+            </li>
+            <li style="margin: auto" class="nav-item">
+                <div style="margin: auto" class="form-group col-md-1">
+                    <button id = "SpreadBFS" class="btn btn-danger" onclick="findXConnectedBFS()" >Breadth First Spread</button>
                 </div>
             </li>
             <li style="margin: auto" class="nav-item">
@@ -203,7 +208,7 @@
     <div id="myModalFail" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
-            <span id="spanFail" class="close" style="color: #red">&times;</span>
+            <span id="spanFail" class="close" style="color: red">&times;</span>
             <p id="warningSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 30px; white-space: pre; color: red"></p>
             <img style="width: 65%; height:65%"src="/static/images/giphy.gif"/>
         </div>
@@ -226,7 +231,7 @@
     <div id="myModalInfectionGuide" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
-            <span id="spanGuide" class="close" style="color: #red">&times;</span>
+            <span id="spanGuide" class="close" style="color: red">&times;</span>
             <p id="guideSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 30px; white-space: pre;">How Covid-19 Spread</p>
             <p id="guideSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 15px; white-space: pre;">No Social Distance</p>
             <img style="width: 100%; height:33%"src="/static/images/NSD.png"/>
@@ -277,8 +282,8 @@
     var myModalSuccess = document.getElementById("myModalSuccess");
     var spanSuccess = document.getElementById("spanSuccess");
     var spanFail = document.getElementById("spanFail");
-    // var rootURL = "https://covid-19-spread.herokuapp.com"
-    var rootURL = "http://127.0.0.1:5000" // dev
+    var rootURL = "https://covid-19-spread.herokuapp.com"
+    // var rootURL = "http://127.0.0.1:5000" // dev
 
 
     // Get the modal
@@ -461,7 +466,8 @@
         // enabl button
         document.getElementById("NoSocialDistance").disabled = false;
         document.getElementById("SocialDistance").disabled = false;
-        document.getElementById("Spread").disabled = false;
+        document.getElementById("SpreadBFS").disabled = false;
+        document.getElementById("SpreadDFS").disabled = false;
         document.getElementById("Clear").disabled = false;
         
         for (let r = 0; r < gridObject.gridRow; r++) {
@@ -688,7 +694,8 @@
         // disabled button
         document.getElementById("NoSocialDistance").disabled = true;
         document.getElementById("SocialDistance").disabled = true;
-        document.getElementById("Spread").disabled = true;
+        document.getElementById("SpreadDFS").disabled = true;
+        document.getElementById("SpreadBFS").disabled = true;
         document.getElementById("Clear").disabled = true;
 
         for (let r = 0; r < gridObject.gridRow; r++) {
