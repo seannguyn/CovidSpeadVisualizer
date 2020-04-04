@@ -36,6 +36,7 @@ def randomizeNoSocialDistance():
     }
     return jsonify(gridInfo)
 
+
 @app.route("/randomizeSocialDistance", methods=["GET"])
 def randomizeSocialDistance():
 
@@ -51,6 +52,7 @@ def randomizeSocialDistance():
     }
     return jsonify(gridInfo)
 
+
 @app.route('/findConnectedX', methods=['POST'])
 def findMaxConnectedNode():
 
@@ -59,6 +61,18 @@ def findMaxConnectedNode():
     grid = Grid(bodyData['gridRow'], bodyData['gridCol'], bodyData['inputString'], bodyData['xCovid'])
 
     Grid.findMaxConnectedCell(grid)
+
+    return jsonify(grid.traversePath)
+
+
+@app.route('/findConnectedXBFS', methods=['POST'])
+def findMaxConnectedNodeBFS():
+
+    bodyData = json.loads(str(request.data, encoding='utf-8'))
+
+    grid = Grid(bodyData['gridRow'], bodyData['gridCol'], bodyData['inputString'], bodyData['xCovid'])
+
+    Grid.BFS(grid)
 
     return jsonify(grid.traversePath)
 

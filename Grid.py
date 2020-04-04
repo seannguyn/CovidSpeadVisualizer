@@ -27,7 +27,6 @@ class Grid:
     def findMaxConnectedCell(grid):
 
         visitedNodes = []
-        maxNodeList = []
 
         for node in grid.covid:
             i = int(node.split("-")[1])
@@ -46,9 +45,6 @@ class Grid:
 
             grid.DFS(grid, (i, j), visitedNodes, nodeList)
 
-            if len(nodeList) > len(maxNodeList):
-                maxNodeList = nodeList
-
             # added to traverse path
             nodeVisit = dict({
                 "node": (i, j),
@@ -57,7 +53,48 @@ class Grid:
             })
             grid.traversePath.append(nodeVisit)
 
-        # return [len(maxNodeList), maxNodeList]
+        return grid
+
+    @staticmethod
+    def BFS(grid):
+
+        visitedNodes = []
+
+        for node in grid.covid:
+            i = int(node.split("-")[1])
+            j = int(node.split("-")[0])
+
+            if (i, j) in visitedNodes or grid.grid[i][j] == '0':
+                nodeVisit = dict({
+                    "node": (i, j),
+                    "path": [],
+                    "pathSize": 0,
+                })
+                grid.traversePath.append(nodeVisit)
+                continue
+
+            queue = [(i, j)]
+            path = []
+            while len(queue) > 0:
+                currentNode = queue.pop(0)
+
+                if currentNode not in path:
+                    path.append(currentNode)
+
+                neighbors = Grid.findNeighbor(grid, currentNode)
+
+                for neighbor in neighbors:
+                    if neighbor not in visitedNodes:
+                        queue.append(neighbor)
+                        visitedNodes.append(neighbor)
+
+            nodeVisit = dict({
+                "node": (i, j),
+                "path": path,
+                "pathSize": len(path),
+            })
+            grid.traversePath.append(nodeVisit)
+
         return grid
 
     @staticmethod

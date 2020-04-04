@@ -142,7 +142,6 @@
 
     /* The Close Button */
     .close {
-        color: #aaaaaa;
         float: right;
         font-size: 28px;
         font-weight: bold;
@@ -150,7 +149,6 @@
 
     .close:hover,
     .close:focus {
-        color: #000;
         text-decoration: none;
         cursor: pointer;
     }
@@ -205,7 +203,7 @@
     <div id="myModalFail" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
-            <span id="spanFail" class="close">&times;</span>
+            <span id="spanFail" class="close" style="color: #red">&times;</span>
             <p id="warningSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 30px; white-space: pre; color: red"></p>
             <img style="width: 65%; height:65%"src="/static/images/giphy.gif"/>
         </div>
@@ -216,7 +214,7 @@
     <div id="myModalSuccess" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
-            <span id="spanSuccess" class="close">&times;</span>
+            <span id="spanSuccess" class="close" style="color: red">&times;</span>
             <p style="margin-bottom: 20px; margin-top: 20px; font-size: 30px">Be Smart. Be Social Distant</p>
             <p id="successSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 30px; white-space: pre; color: red"></p>
             <img style="width: 66.8%; height:60%" src="/static/images/tenor.gif"/>
@@ -228,7 +226,7 @@
     <div id="myModalInfectionGuide" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
-            <span id="spanGuide" class="close">&times;</span>
+            <span id="spanGuide" class="close" style="color: #red">&times;</span>
             <p id="guideSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 30px; white-space: pre;">How Covid-19 Spread</p>
             <p id="guideSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 15px; white-space: pre;">No Social Distance</p>
             <img style="width: 100%; height:33%"src="/static/images/NSD.png"/>
@@ -279,7 +277,8 @@
     var myModalSuccess = document.getElementById("myModalSuccess");
     var spanSuccess = document.getElementById("spanSuccess");
     var spanFail = document.getElementById("spanFail");
-    var rootURL = "https://covid-19-spread.herokuapp.com"
+    // var rootURL = "https://covid-19-spread.herokuapp.com"
+    var rootURL = "http://127.0.0.1:5000" // dev
 
 
     // Get the modal
@@ -398,6 +397,27 @@
                                         'Content-Type': 'application/json'
                                     }
                                 });
+
+        const result = await response.json();
+
+        await displayAlgorithm(result)
+
+        addEventListeners();
+    }
+
+    async function findXConnectedBFS() {
+
+        convertGridToInputString();
+        gridObject.xPath =[]
+        gridObject.xVisited = []
+
+        const response = await fetch(rootURL+'/findConnectedXBFS', {
+                                    method: 'POST',
+                                    body: JSON.stringify(gridObject),
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                });        
 
         const result = await response.json();
 
