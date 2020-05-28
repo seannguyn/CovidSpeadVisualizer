@@ -168,37 +168,27 @@
 <body draggable="false" onload="initializingPage()">
     <nav style="border-radius: 0px" class="navbar navbar-expand-sm bg-dark navbar-dark">
         <ul class="navbar-nav">
-            <li style="margin: auto; font-size: 30px" class="nav-item active">
-                <a class="nav-link" href="#">Covid-19 🦠</a>
+            <li style="margin: auto; font-size: 50px" class="nav-item active">
+                <a class="nav-link" href="#">🦠</a>
             </li>
             <li style="margin: auto" class="nav-item">
-                <div style="margin: auto" class="form-group col-md-1">
-                    <button id = "NoSocialDistance" class="btn btn-primary" onclick="randomizeNoSocialDistance()" >No Social Distance</button>
+                <div style="margin: auto" class="form-group col-md-10">
+                    <button id = "NoSocialDistance" class="btn btn-primary" onclick="randomizeNoSocialDistance()" style="font-size: 30px">No Social Distance</button>
                 </div>
             </li>
             <li style="margin: auto" class="nav-item">
-                <div style="margin: auto" class="form-group col-md-1">
-                    <button id = "SocialDistance" class="btn btn-primary" onclick="randomizeSocialDistance()">Social Distance</button>
+                <div style="margin: auto" class="form-group col-md-10">
+                    <button id = "SocialDistance" class="btn btn-primary" onclick="randomizeSocialDistance()" style="font-size: 30px">Social Distance</button>
                 </div>
             </li>
             <li style="margin: auto" class="nav-item">
-                <div style="margin: auto" class="form-group col-md-1">
-                    <button id = "InfectiousGuideButton" class="btn btn-secondary">Infectious Guide</button>
+                <div style="margin: auto" class="form-group col-md-10">
+                    <button id = "InfectiousGuideButton" class="btn btn-secondary" style="font-size: 30px">Guide</button>
                 </div>
             </li>
             <li style="margin: auto" class="nav-item">
-                <div style="margin: auto" class="form-group col-md-1">
-                    <button id = "SpreadDFS" class="btn btn-danger" onclick="findXConnected()" >Depth First Spread</button>
-                </div>
-            </li>
-            <li style="margin: auto" class="nav-item">
-                <div style="margin: auto" class="form-group col-md-1">
-                    <button id = "SpreadBFS" class="btn btn-danger" onclick="findXConnectedBFS()" >Breadth First Spread</button>
-                </div>
-            </li>
-            <li style="margin: auto" class="nav-item">
-                <div style="margin: auto" class="form-group col-md-1">
-                    <button id = "Clear" class="btn btn-primary" onclick="toggleAbort()">Clear</button>
+                <div style="margin: auto" class="form-group col-md-10">
+                    <button id = "SpreadDFS" class="btn btn-danger" onclick="findXConnected()" style="font-size: 30px">Spread</button>
                 </div>
             </li>
         </ul>
@@ -232,10 +222,10 @@
         <!-- Modal content -->
         <div class="modal-content">
             <span id="spanGuide" class="close" style="color: red">&times;</span>
-            <p id="guideSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 30px; white-space: pre;">How Covid-19 Spread</p>
-            <p id="guideSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 15px; white-space: pre;">No Social Distance</p>
-            <img style="width: 100%; height:33%"src="/static/images/NSD.png"/>
-            <p id="guideSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 15px; white-space: pre;">Social Distance</p>
+            <p id="guideSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 40px; white-space: pre;">How it Spread</p>
+            <p id="guideSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 40px; white-space: pre;">No Social Distance</p>
+            <img style="width: 100%; height:50%"src="/static/images/NSD.png"/>
+            <p id="guideSpan" style="margin-bottom: 20px; margin-top: 20px; font-size: 40px; white-space: pre;">Social Distance</p>
             <img style="width: 100%; height:33%"src="/static/images/SD.png"/>
         </div>
         </div>
@@ -249,11 +239,7 @@
 	</div>
 
     <div class="Note">
-        This App helps you to visualize the spread of the deadly <span style="color: red">Covid-19 🦠</span>
-    </div>
-
-    <div class="footer">
-        <a style="text-decoration : none; color : #000;" href="https://github.com/seannguyn">github.com/seannguyn</a>
+        Visualize how <span style="color: red">Covid-19 🦠</span> spreads
     </div>
 </body>
 <script type="text/javascript">
@@ -262,7 +248,7 @@
     var done = false
 
     var gridObject = {
-        gridRow: 22,
+        gridRow: 34,
         gridCol: 40,
         inputString: "",
         xNodes: [],
@@ -282,8 +268,8 @@
     var myModalSuccess = document.getElementById("myModalSuccess");
     var spanSuccess = document.getElementById("spanSuccess");
     var spanFail = document.getElementById("spanFail");
-    var rootURL = "https://covid-19-spread.herokuapp.com"
-    // var rootURL = "http://127.0.0.1:5000" // dev
+    // var rootURL = "https://covid-19-spread.herokuapp.com"
+    var rootURL = "http://127.0.0.1:5000" // dev
 
 
     // Get the modal
@@ -466,9 +452,9 @@
         // enabl button
         document.getElementById("NoSocialDistance").disabled = false;
         document.getElementById("SocialDistance").disabled = false;
-        document.getElementById("SpreadBFS").disabled = false;
+        // document.getElementById("SpreadBFS").disabled = false;
         document.getElementById("SpreadDFS").disabled = false;
-        document.getElementById("Clear").disabled = false;
+        // document.getElementById("Clear").disabled = false;
         
         for (let r = 0; r < gridObject.gridRow; r++) {
             for (let c = 0; c < gridObject.gridCol; c++) {
@@ -695,8 +681,8 @@
         document.getElementById("NoSocialDistance").disabled = true;
         document.getElementById("SocialDistance").disabled = true;
         document.getElementById("SpreadDFS").disabled = true;
-        document.getElementById("SpreadBFS").disabled = true;
-        document.getElementById("Clear").disabled = true;
+        // document.getElementById("SpreadBFS").disabled = true;
+        // document.getElementById("Clear").disabled = true;
 
         for (let r = 0; r < gridObject.gridRow; r++) {
             for (let c = 0; c < gridObject.gridCol; c++) {

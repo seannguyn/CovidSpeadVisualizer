@@ -131,7 +131,7 @@ class Grid:
 
     @staticmethod
     def randomInputStringAndCovidNoSocialDistance():
-        strLen = 880
+        strLen = 1360
         binaryStr = ""
         ones = []
         covidStr = ""
@@ -161,7 +161,7 @@ class Grid:
 
     @staticmethod
     def randomInputStringAndCovidSocialDistance():
-        strLen = 880
+        strLen = 1360
         col = 40
         binaryStr = ""
         ones = []
