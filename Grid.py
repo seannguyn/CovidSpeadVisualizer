@@ -131,7 +131,7 @@ class Grid:
 
     @staticmethod
     def randomInputStringAndCovidNoSocialDistance():
-        strLen = 1360
+        strLen = 360
         binaryStr = ""
         ones = []
         covidStr = ""
@@ -150,8 +150,8 @@ class Grid:
 
         # convert ones position into grid position
         for i in covidPosition:
-            localCol = i % 40;
-            localRow = math.ceil((i - localCol) / 40)
+            localCol = i % 18;
+            localRow = math.ceil((i - localCol) / 18)
             localCell = str(localCol)+"-"+str(localRow)
             covidStr += localCell+"_"
 
@@ -161,8 +161,8 @@ class Grid:
 
     @staticmethod
     def randomInputStringAndCovidSocialDistance():
-        strLen = 1360
-        col = 40
+        strLen = 360
+        col = 18
         binaryStr = ""
         ones = []
         prohibittedCell = []
@@ -196,8 +196,8 @@ class Grid:
 
         # convert ones position into grid position
         for i in covidPosition:
-            localCol = i % 40;
-            localRow = math.ceil((i - localCol) / 40)
+            localCol = i % 18;
+            localRow = math.ceil((i - localCol) / 18)
             localCell = str(localCol) + "-" + str(localRow)
             covidStr += localCell + "_"
 
