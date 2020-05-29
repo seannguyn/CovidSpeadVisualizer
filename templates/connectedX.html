@@ -117,6 +117,9 @@
         font-size: 30px;
     }
 
+    .navbar{margin-bottom: 0px !important; border-radius: 0px !important }
+
+
     .modal {
         display: none; /* Hidden by default */
         position: fixed; /* Stay in place */
@@ -183,12 +186,21 @@
             </li>
             <li style="margin: auto" class="nav-item">
                 <div style="margin: auto" class="form-group col-md-10">
-                    <button id = "InfectiousGuideButton" class="btn btn-secondary" style="font-size: 30px">Guide</button>
+                    <button id = "InfectiousGuideButton" class="btn btn-secondary" style="font-size: 30px">Infection Guide</button>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <nav style="border-radius: 0px" class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <ul class="navbar-nav">
+            <li style="margin: auto" class="nav-item">
+                <div style="margin: auto" class="form-group col-md-10">
+                    <button id = "SpreadDFS" class="btn btn-danger" onclick="findXConnected()" style="font-size: 30px">Depth First Spread</button>
                 </div>
             </li>
             <li style="margin: auto" class="nav-item">
                 <div style="margin: auto" class="form-group col-md-10">
-                    <button id = "SpreadDFS" class="btn btn-danger" onclick="findXConnected()" style="font-size: 30px">Spread</button>
+                    <button id = "SpreadBFS" class="btn btn-danger" onclick="findXConnectedBFS()" style="font-size: 30px">Breadth First Spread</button>
                 </div>
             </li>
         </ul>
@@ -452,7 +464,7 @@
         // enabl button
         document.getElementById("NoSocialDistance").disabled = false;
         document.getElementById("SocialDistance").disabled = false;
-        // document.getElementById("SpreadBFS").disabled = false;
+        document.getElementById("SpreadBFS").disabled = false;
         document.getElementById("SpreadDFS").disabled = false;
         // document.getElementById("Clear").disabled = false;
         
@@ -681,7 +693,7 @@
         document.getElementById("NoSocialDistance").disabled = true;
         document.getElementById("SocialDistance").disabled = true;
         document.getElementById("SpreadDFS").disabled = true;
-        // document.getElementById("SpreadBFS").disabled = true;
+        document.getElementById("SpreadBFS").disabled = true;
         // document.getElementById("Clear").disabled = true;
 
         for (let r = 0; r < gridObject.gridRow; r++) {
