@@ -9,18 +9,18 @@
     <link rel="shortcut icon" type="image/png" href="/static/images/covid.png">
 <style>
     table {
-    	font-family: arial, sans-serif;
-    	border-collapse: collapse;
-    	margin: 2% auto;
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        margin: 2% auto;
     }
 
     td {
-    	border: 1px solid #dddddd;
-    	text-align: center;
+        border: 1px solid #dddddd;
+        text-align: center;
         font-size: 15px;
-    	padding: 0px;
-    	height: 30px;
-    	width: 30px;
+        padding: 0px;
+        height: 30px;
+        width: 30px;
     }
 
     .x-node{
@@ -99,7 +99,7 @@
     }
 
     .PositionBlock {
-        height: 50px; width: 20%; 
+        height: 50px; width: 15%; 
         color: black; 
         display: inline-block; 
         text-align: center;
@@ -171,40 +171,50 @@
 <body draggable="false" onload="initializingPage()">
     <nav style="border-radius: 0px" class="navbar navbar-expand-sm bg-dark navbar-dark">
         <ul class="navbar-nav">
-            <li style="margin: auto; font-size: 50px" class="nav-item active">
+            <li style="margin: auto; font-size: 30px" class="nav-item active">
                 <a class="nav-link" href="#">🦠</a>
             </li>
             <li style="margin: auto" class="nav-item">
-                <div style="margin: auto" class="form-group col-md-10">
-                    <button id = "NoSocialDistance" class="btn btn-primary" onclick="randomizeNoSocialDistance()" style="font-size: 30px">No Social Distance</button>
+                <div style="margin: auto" class="form-group col-sm-1">
+                    <button id = "NoSocialDistance" class="btn btn-primary" onclick="randomizeNoSocialDistance()" style="font-size: 10px">No Social Distance</button>
+                </div>
+            </li>
+            <li style="margin: auto" class="nav-item">
+                <div style="margin: auto" class="form-group col-sm-11">
+                    <button id = "SocialDistance" class="btn btn-primary" onclick="randomizeSocialDistance()" style="font-size: 10px">Social Distance</button>
+                </div>
+            </li>
+            <li style="margin: auto" class="nav-item">
+                <div style="margin: auto" class="form-group col-sm-1">
+                    <button id = "InfectiousGuideButton" class="btn btn-secondary" style="font-size: 10px">Infection Guide</button>
                 </div>
             </li>
             <li style="margin: auto" class="nav-item">
                 <div style="margin: auto" class="form-group col-md-10">
-                    <button id = "SocialDistance" class="btn btn-primary" onclick="randomizeSocialDistance()" style="font-size: 30px">Social Distance</button>
+                    <button id = "SpreadDFS" class="btn btn-danger" onclick="findXConnected()" style="font-size: 10px">Depth First Spread</button>
                 </div>
             </li>
             <li style="margin: auto" class="nav-item">
                 <div style="margin: auto" class="form-group col-md-10">
-                    <button id = "InfectiousGuideButton" class="btn btn-secondary" style="font-size: 30px">Infection Guide</button>
+                    <button id = "SpreadBFS" class="btn btn-danger" onclick="findXConnectedBFS()" style="font-size: 10px">Breadth First Spread</button>
                 </div>
             </li>
         </ul>
     </nav>
-    <nav style="border-radius: 0px" class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <!-- <nav style="border-radius: 0px" class="navbar navbar-expand-sm bg-dark navbar-dark">
         <ul class="navbar-nav">
             <li style="margin: auto" class="nav-item">
                 <div style="margin: auto" class="form-group col-md-10">
-                    <button id = "SpreadDFS" class="btn btn-danger" onclick="findXConnected()" style="font-size: 30px">Depth First Spread</button>
+                    <button id = "SpreadDFS" class="btn btn-danger" onclick="findXConnected()" style="font-size: 10px">Depth First Spread</button>
                 </div>
             </li>
             <li style="margin: auto" class="nav-item">
                 <div style="margin: auto" class="form-group col-md-10">
-                    <button id = "SpreadBFS" class="btn btn-danger" onclick="findXConnectedBFS()" style="font-size: 30px">Breadth First Spread</button>
+                    <button id = "SpreadBFS" class="btn btn-danger" onclick="findXConnectedBFS()" style="font-size: 10px">Breadth First Spread</button>
                 </div>
             </li>
         </ul>
-    </nav>
+    </nav> -->
 
     <!-- The Modal -->
     <div id="myModalFail" class="modal">
@@ -246,12 +256,12 @@
     <div id="PositionSection" class="Position">
     </div>
 
-	<div>
-		<table id="board" draggable="false"></table>
-	</div>
+    <div>
+        <table id="board" draggable="false"></table>
+    </div>
 
     <div class="Note">
-        Visualize how <span style="color: red">Covid-19 🦠</span> spreads
+      <span style="color: red">Covid-19 🦠</span>
     </div>
 </body>
 <script type="text/javascript">
@@ -260,8 +270,8 @@
     var done = false
 
     var gridObject = {
-        gridRow: 34,
-        gridCol: 40,
+        gridRow: 20,
+        gridCol: 18,
         inputString: "",
         xNodes: [],
         xCovid: [],
@@ -375,14 +385,14 @@
         let positionHTML=
         `
             <div style="color: red" class="PositionBlock">
-                ${gridObject.xCovid.length}    🦠
+                ${gridObject.xCovid.length} 🦠
             </div>
 
             <div style="color: red" class="PositionBlock">
-                ${gridObject.xPath.length}     🤢
+                ${gridObject.xPath.length} 🤢
             </div>
             <div style="color: black" class="PositionBlock">
-                ${healthyPeople}    😷
+                ${healthyPeople} 😷
             </div>
         `
         positionSection.innerHTML = positionHTML;
@@ -629,7 +639,9 @@
         
         if (gridObject.xVisited.length == 0) {
             var displayText = document.getElementById("successSpan");
-            displayText.innerHTML = `${gridObject.xCovid.length}  🦠        ${gridObject.xPath.length}  🤢        <span style="color: black">${gridObject.xNodes.length - gridObject.xPath.length}  😷<span>`
+            displayText.innerHTML = `${gridObject.xCovid.length}  🦠</br>`
+            displayText.innerHTML += `${gridObject.xPath.length}  🤢</br>`
+            displayText.innerHTML +=`<span style="color: black">${gridObject.xNodes.length - gridObject.xPath.length}  😷<span>`
             myModalSuccess.style.display = "block";
         }else {
             var displayText = document.getElementById("warningSpan");
@@ -711,10 +723,3 @@
 
 </script>
 </html>
-
-
-
-
-
-
-

@@ -9,10 +9,10 @@ app = Flask(__name__, static_url_path='/static')
 CORS(app)
 
 
-@app.route("/", methods=["GET"])
-def connectedX():
-
-    return render_template("connectedX.html",)
+# @app.route("/", methods=["GET"])
+# def connectedX():
+#
+#     return render_template("connectedX.html",)
 
 
 @app.route("/dummy", methods=["GET"])
